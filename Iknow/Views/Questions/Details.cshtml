@@ -1,0 +1,55 @@
+﻿@model Iknow.Models.Question
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Question</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.questionType.category.name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.questionType.category.name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.questionType.type)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.questionType.type)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.hint1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.hint1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.hint2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.hint2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.hint3)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.hint3)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.answer)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.answer)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

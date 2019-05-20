@@ -1,0 +1,46 @@
+﻿@model Iknow.Models.Question
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Question</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.hint1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.hint1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.hint2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.hint2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.hint3)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.hint3)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.answer)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.answer)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="ID" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
