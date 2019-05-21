@@ -52,7 +52,9 @@ namespace Iknow.Controllers
         // GET: QuestionTypes/Create
         public IActionResult Create()
         {
-            if (context.MasterTable.First(x => x.key == "allow_create_types").value != "true")
+
+            var allowCreate = context.MasterTable.FirstOrDefault(x => x.key == "allow_create_types");
+            if (allowCreate == null || allowCreate.value != "true")
                 return RedirectToAction(nameof(Index));
             var categories = context.Categories.Where(x => x.locked).Select(x => new string[] { x.name, x.ID.ToString() }).ToArray();
             ViewBag.Categories = categories;
@@ -169,6 +171,13 @@ namespace Iknow.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var questionType = await context.QuestionsTypes.FindAsync(id);
+
+            context.Entry(questionType).Collection(x => x.questions).Load();
+            questionType.questions.ToList().ForEach(qt =>
+            {
+                qt.questionType = null;
+                context.Update(qt);
+            });
             context.QuestionsTypes.Remove(questionType);
             await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

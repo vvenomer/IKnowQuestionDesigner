@@ -27,8 +27,8 @@ namespace Iknow.Controllers
         {
             //to be deleted after reveal
             List<Category> model;
-
-            if (context.MasterTable.First(x => x.key == "show_all_categories").value == "true")
+            var showAll = context.MasterTable.FirstOrDefault(x => x.key == "show_all_categories");
+            if (showAll!=null && showAll.value == "true")
             {
                 model = context.Categories.ToList();
             }

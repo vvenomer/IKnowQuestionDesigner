@@ -68,7 +68,8 @@ namespace Iknow.Controllers
         public async Task<IActionResult> Create()
         {
 
-            if (context.MasterTable.First(x => x.key == "allow_create_questions").value != "true")
+            var allowCreate = context.MasterTable.FirstOrDefault(x => x.key == "allow_create_questions");
+            if (allowCreate == null || allowCreate.value != "true")
                 return RedirectToAction(nameof(Index));
 
             var questionTypes = context.QuestionsTypes.Select(x=>x.type).ToListAsync();
