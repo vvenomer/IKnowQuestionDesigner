@@ -12,6 +12,7 @@ namespace Iknow.Models.DataWith
 
         public QuestionTypeWithCategory(QuestionType questionType, string category)
         {
+            this.ID = questionType.ID;
             type = questionType.type;
             Category = category;
         }

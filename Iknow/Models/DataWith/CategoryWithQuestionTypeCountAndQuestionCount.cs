@@ -14,6 +14,7 @@ namespace Iknow.Models.DataWith
         }
         public CategoryWithQuestionTypeCountAndQuestionCount(Category category, int qtC, int qC)
         {
+            this.ID = category.ID;
             this.description = category.description;
             this.locked = category.locked;
             this.name = category.name;

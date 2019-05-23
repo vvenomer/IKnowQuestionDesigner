@@ -79,7 +79,7 @@ namespace Iknow.Controllers
         public IActionResult Create()
         {
             if (userManager.GetUserId(HttpContext.User) == null)
-                return RedirectToAction("Account/Login", "Identity");
+                return Redirect("/Identity/Account/Login");
 
             var user = userManager.GetUserAsync(HttpContext.User).GetAwaiter().GetResult();
             var nrOfCategories = context.Categories.Where(x => x.User == user).Count();
@@ -207,13 +207,13 @@ namespace Iknow.Controllers
         {
             return context.Categories.Any(e => e.ID == id);
         }
-        private async Task<RedirectToActionResult> IsOwnerAsync(Category category)
+        private async Task<RedirectResult> IsOwnerAsync(Category category)
         {
             context.Entry(category).Reference(x => x.User).Load();
 
             if (category.User != await userManager.GetUserAsync(HttpContext.User))
             {
-                return RedirectToAction("Account/Login", "Identity");
+                return Redirect("/Identity/Account/Login");
             }
             return null;
         }

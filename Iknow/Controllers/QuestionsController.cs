@@ -75,8 +75,8 @@ namespace Iknow.Controllers
             var questionTypes = context.QuestionsTypes.Select(x=>x.type).ToListAsync();
 
             if (userManager.GetUserId(HttpContext.User) == null)
-                return RedirectToAction("Account/Login", "Identity");
-            
+                return Redirect("/Identity/Account/Login");
+
             ViewData["QuestionTypes"] = JsonConvert.SerializeObject(await questionTypes);
             return View();
         }

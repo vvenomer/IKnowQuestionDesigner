@@ -16,6 +16,7 @@ namespace Iknow.Models.DataWith
         }
         public QuestionTypeWithQuestionCount(QuestionType questionType, List<UserWithQuestionCount> usersWithQuestions)
         {
+            this.ID = questionType.ID;
             this.type = questionType.type;
             this.usersWithQuestions = usersWithQuestions;
         }
