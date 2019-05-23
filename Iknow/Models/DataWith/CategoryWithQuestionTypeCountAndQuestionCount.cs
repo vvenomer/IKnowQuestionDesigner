@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,7 +21,9 @@ namespace Iknow.Models.DataWith
             questionttypeCount = qtC;
             questionCount = qC;
         }
+        [Display(Name = "Number of Question Types")]
         public int questionttypeCount { get; set; }
+        [Display(Name = "Number of Questions")]
         public int questionCount { get; set; }
     }
 }

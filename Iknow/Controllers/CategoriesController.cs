@@ -30,16 +30,19 @@ namespace Iknow.Controllers
             List<CategoryWithQuestionTypeCountAndQuestionCount> model;
             ViewBag.showCounts = false;
             var showAll = context.MasterTable.FirstOrDefault(x => x.key == "show_all_categories");
-            if (showAll!=null && showAll.value == "true")
+            if (showAll != null && showAll.value == "true")
             {
-                context.Users.Load(); context.QuestionsTypes.Load(); context.Questions.Load();
-                model = context.Categories
-                    .Join(context.QuestionsTypes, c => c, qt => qt.category, (c, qt) => new { c = c, qt = qt })
-                    .GroupJoin(context.Questions, cqt => cqt.qt, q => q.questionType, (cqt, q) => new { c = cqt.c, qt = cqt.qt, qC = q.Count())
-                    .GroupBy(g => g.c)
-                    .Select(s => new CategoryWithQuestionTypeCountAndQuestionCount(s.Key, s.Count(), s.Sum(x => x.qC)))
-                    .OrderBy(x=>x.User.UserName)
-                    .ToList();
+                model = await context.Categories
+                    .Include(x => x.User)
+                    .GroupJoin(context.QuestionsTypes, c => c, qt => qt.category, (c, qt) => new
+                    {
+                        c = c,
+                        qtC = qt.Count(),
+                        qC = qt.GroupJoin(context.Questions, t => t, q => q.questionType, (t, q) => new { t, qC = q.Count() }).Sum(x => x.qC)
+                    })
+                    .Select(s => new CategoryWithQuestionTypeCountAndQuestionCount(s.c, s.qtC, s.qC))
+                    .OrderBy(x => x.User)
+                    .ToListAsync();
                 ViewBag.showCounts = true;
             }
             else if (userManager.GetUserId(HttpContext.User) == null)
@@ -49,7 +52,7 @@ namespace Iknow.Controllers
             else
             {
                 var user = await userManager.GetUserAsync(HttpContext.User);
-                model = context.Categories.Where(x => x.User == user).Select(x => new CategoryWithQuestionTypeCountAndQuestionCount(x, 0, 0)).ToList();
+                model = await context.Categories.Where(x => x.User == user).Select(x => new CategoryWithQuestionTypeCountAndQuestionCount(x, 0, 0)).ToListAsync();
             }
             return View(model);
         }

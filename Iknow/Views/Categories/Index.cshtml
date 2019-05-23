@@ -24,11 +24,14 @@
             </th>
             @if (ViewBag.showCounts)
             {
-                < th >
-                @Html.DisplayNameFor(model => model.questionttypeCount)
-                </ th >
+                <th>
+                    @Html.DisplayNameFor(model => model.questionttypeCount)
+                </th>
                 <th>
                     @Html.DisplayNameFor(model => model.questionCount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.User.UserName)
                 </th>
             }
             <th></th>
@@ -49,11 +52,14 @@
             </td>
             @if (ViewBag.showCounts)
             {
-                < td >
-                @Html.DisplayFor(modelItem => item.questionCount)
-                </ td >
                 <td>
                     @Html.DisplayFor(modelItem => item.questionttypeCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.questionCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.UserName)
                 </td>
             }
             <td>

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Iknow.Models.QuestionType>
+﻿@model IEnumerable<Iknow.Models.DataWith.QuestionTypeWithQuestionCount>
 
 @{
     ViewData["Title"] = "Index";
@@ -19,24 +19,65 @@
             <th>
                 @Html.DisplayNameFor(model => model.type)
             </th>
+            @for (int i = 0; i < ViewBag.Users.Count; i++)
+            {
+                string user = ViewBag.Users[i];
+                <th>
+                    @user
+                </th>
+            }
+            <th>
+                Jest Ok
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.category.name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.type)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <!--<a asp-action="Details" asp-route-id="@item.ID">Details</a> |-->
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.category.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.type)
+                </td>
+
+                @for (int i = 0; i < ViewBag.Users.Count; i++)
+                {
+                    string user = ViewBag.Users[i];
+                    var userWithQuestionCount = @item.usersWithQuestions.FirstOrDefault(x => x.user == user);
+                    <td>
+                        @if (userWithQuestionCount != null)
+                        {
+                            var toMuch = (2*userWithQuestionCount.questionCount > item.usersWithQuestions.Sum(x => x.questionCount)) ? "red-span" : "";
+
+                            <span class="@toMuch">
+                                @userWithQuestionCount.questionCount
+                            </span>
+                        }
+                        else
+                        {
+                            <span>0</span>
+                        }
+                    </td>
+                }
+                <td>
+                    @if (ViewBag.Users.Count == item.usersWithQuestions.Count)
+                    {
+                        <input class="check-box" disabled="disabled" type="checkbox" checked>
+                    }
+                    else
+                    {
+                        <input class="check-box" disabled="disabled" type="checkbox">
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <!--<a asp-action="Details" asp-route-id="@item.ID">Details</a> |-->
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

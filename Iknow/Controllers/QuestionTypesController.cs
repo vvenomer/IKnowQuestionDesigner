@@ -24,8 +24,22 @@ namespace Iknow.Controllers
         // GET: QuestionTypes
         public async Task<IActionResult> Index()
         {
-            context.Categories.Load();
-            return View(await context.QuestionsTypes.ToListAsync());
+            //liczba osób -> ile każda osoba ma pytań
+            //jeśli ma więcej niż summa innych - zaznacz na czerowno
+            ViewBag.Users = context.Users.Select(x => x.UserName).ToList();
+            var model = context.QuestionsTypes
+                .Include(qt => qt.category)
+                .GroupJoin(context.Questions, qt => qt, q => q.questionType, (qt, q) => new
+                {
+                    qt,
+                    uqC = q.Join(context.Users, qq => qq.User, u => u, (qq, u) => new { q = qq, u })
+                        .GroupBy(g => g.u)
+                        .Select(s => new { u = s.Key, qC = s.Count() })
+                })
+                .Select(s => new QuestionTypeWithQuestionCount(s.qt, s.uqC.Select(x => new UserWithQuestionCount { user = x.u.UserName, questionCount = x.qC }).ToList()))
+                .ToListAsync();
+
+            return View(await model);
         }
 
         // GET: QuestionTypes/Details/5
