@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Iknow.Data;
 using Iknow.Models;
 using Newtonsoft.Json;
-using Iknow.Models.DataWithReference;
+using Iknow.Models.DataWith;
 
 namespace Iknow.Controllers
 {

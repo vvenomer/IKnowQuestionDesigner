@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Iknow.Models.DataWithReference
+namespace Iknow.Models.DataWith
 {
     public class QuestionTypeWithCategory : QuestionType
     {

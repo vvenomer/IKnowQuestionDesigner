@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Iknow.Data;
 using Iknow.Models;
+using Iknow.Models.DataWith;
 using Microsoft.AspNetCore.Identity;
 
 namespace Iknow.Controllers
@@ -26,20 +27,29 @@ namespace Iknow.Controllers
         public async Task<IActionResult> Index()
         {
             //to be deleted after reveal
-            List<Category> model;
+            List<CategoryWithQuestionTypeCountAndQuestionCount> model;
+            ViewBag.showCounts = false;
             var showAll = context.MasterTable.FirstOrDefault(x => x.key == "show_all_categories");
             if (showAll!=null && showAll.value == "true")
             {
-                model = context.Categories.ToList();
+                context.Users.Load(); context.QuestionsTypes.Load(); context.Questions.Load();
+                model = context.Categories
+                    .Join(context.QuestionsTypes, c => c, qt => qt.category, (c, qt) => new { c = c, qt = qt })
+                    .GroupJoin(context.Questions, cqt => cqt.qt, q => q.questionType, (cqt, q) => new { c = cqt.c, qt = cqt.qt, qC = q.Count())
+                    .GroupBy(g => g.c)
+                    .Select(s => new CategoryWithQuestionTypeCountAndQuestionCount(s.Key, s.Count(), s.Sum(x => x.qC)))
+                    .OrderBy(x=>x.User.UserName)
+                    .ToList();
+                ViewBag.showCounts = true;
             }
             else if (userManager.GetUserId(HttpContext.User) == null)
             {
-                model = new List<Category>();
+                model = new List<CategoryWithQuestionTypeCountAndQuestionCount>();
             }
             else
             {
                 var user = await userManager.GetUserAsync(HttpContext.User);
-                model = context.Categories.Where(x => x.User == user).ToList();
+                model = context.Categories.Where(x => x.User == user).Select(x => new CategoryWithQuestionTypeCountAndQuestionCount(x, 0, 0)).ToList();
             }
             return View(model);
         }

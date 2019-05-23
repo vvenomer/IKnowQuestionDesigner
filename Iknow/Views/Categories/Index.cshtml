@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Iknow.Models.Category>
+﻿@model IEnumerable<Iknow.Models.DataWith.CategoryWithQuestionTypeCountAndQuestionCount>
 
 @{
     ViewData["Title"] = "Categories";
@@ -22,11 +22,21 @@
             <th>
                 @Html.DisplayNameFor(model => model.locked)
             </th>
+            @if (ViewBag.showCounts)
+            {
+                < th >
+                @Html.DisplayNameFor(model => model.questionttypeCount)
+                </ th >
+                <th>
+                    @Html.DisplayNameFor(model => model.questionCount)
+                </th>
+            }
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.name)
@@ -37,12 +47,21 @@
             <td>
                 @Html.DisplayFor(modelItem => item.locked)
             </td>
+            @if (ViewBag.showCounts)
+            {
+                < td >
+                @Html.DisplayFor(modelItem => item.questionCount)
+                </ td >
+                <td>
+                    @Html.DisplayFor(modelItem => item.questionttypeCount)
+                </td>
+            }
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
                 <!--<a asp-action="Details" asp-route-id="@item.ID">Details</a> |-->
                 <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>

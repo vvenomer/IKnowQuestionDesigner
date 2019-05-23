@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Iknow.Data;
 using Iknow.Models;
 using Microsoft.AspNetCore.Identity;
-using Iknow.Models.DataWithReference;
+using Iknow.Models.DataWith;
 
 namespace Iknow.Controllers
 {
