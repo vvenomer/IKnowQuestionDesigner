@@ -54,6 +54,7 @@ namespace Iknow.Controllers
                 var user = await userManager.GetUserAsync(HttpContext.User);
                 model = await context.Categories.Where(x => x.User == user).Select(x => new CategoryWithQuestionTypeCountAndQuestionCount(x, 0, 0)).ToListAsync();
             }
+            ViewBag.CategoriesSum = context.Categories.Count();
             return View(model);
         }
 
