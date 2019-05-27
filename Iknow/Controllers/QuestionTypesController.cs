@@ -85,14 +85,8 @@ namespace Iknow.Controllers
         {
             if (ModelState.IsValid)
             {
-                var category = context.Categories.Find(int.Parse(questionType.Category));
-                if (category == null)
-                {
-                    ViewData["Error"] = "There is no such category";
-                    return View();
-                }
-                questionType.category = category;
 
+                var category = questionType.Category != null ? context.Categories.Find(int.Parse(questionType.Category)) : null;
                 context.Add(questionType);
                 await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -138,9 +132,12 @@ namespace Iknow.Controllers
             {
                 try
                 {
-                    var category = context.Categories.Find(int.Parse(questionType.Category));
+                    if(questionType.Category != null)
+                        questionType.category = context.Categories.Find(int.Parse(questionType.Category));
+                    else
+                    {
 
-                    questionType.category = category;
+                    }
 
                     context.Update(questionType);
                     await context.SaveChangesAsync();

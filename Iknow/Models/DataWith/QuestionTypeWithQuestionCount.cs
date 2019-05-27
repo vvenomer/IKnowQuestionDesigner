@@ -18,6 +18,7 @@ namespace Iknow.Models.DataWith
         {
             this.ID = questionType.ID;
             this.type = questionType.type;
+            this.category = questionType.category;
             this.usersWithQuestions = usersWithQuestions;
         }
         [Display(Name = "Number of Questions")]
