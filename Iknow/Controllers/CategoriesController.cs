@@ -41,7 +41,7 @@ namespace Iknow.Controllers
                         qC = qt.GroupJoin(context.Questions, t => t, q => q.questionType, (t, q) => new { t, qC = q.Count() }).Sum(x => x.qC)
                     })
                     .Select(s => new CategoryWithQuestionTypeCountAndQuestionCount(s.c, s.qtC, s.qC))
-                    .OrderByDescending(x => x.locked).ThenBy(x => x.User).ToList();
+                    .OrderByDescending(x => x.locked).ThenBy(x => x.User==null ? "" : x.User.UserName).ToList();
                 ViewBag.showCounts = true;
             }
             else if (userManager.GetUserId(HttpContext.User) == null)
