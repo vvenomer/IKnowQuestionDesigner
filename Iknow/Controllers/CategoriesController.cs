@@ -32,17 +32,16 @@ namespace Iknow.Controllers
             var showAll = context.MasterTable.FirstOrDefault(x => x.key == "show_all_categories");
             if (showAll != null && showAll.value == "true")
             {
-                model = await context.Categories
-                    .Include(x => x.User)
+                model = context.Categories
+                    .Include(x => x.User).ToList()
                     .GroupJoin(context.QuestionsTypes, c => c, qt => qt.category, (c, qt) => new
                     {
-                        c = c,
+                        c,
                         qtC = qt.Count(),
                         qC = qt.GroupJoin(context.Questions, t => t, q => q.questionType, (t, q) => new { t, qC = q.Count() }).Sum(x => x.qC)
                     })
                     .Select(s => new CategoryWithQuestionTypeCountAndQuestionCount(s.c, s.qtC, s.qC))
-                    .OrderBy(x => x.User)
-                    .ToListAsync();
+                    .OrderByDescending(x => x.locked).ThenBy(x => x.User).ToList();
                 ViewBag.showCounts = true;
             }
             else if (userManager.GetUserId(HttpContext.User) == null)

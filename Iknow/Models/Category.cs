@@ -18,7 +18,7 @@ namespace Iknow.Models
         [Display(Name = "Description")]
         public string description { get; set; }
 
-        [Display(Name = "Choosen")]
+        [Display(Name = "Chosen")]
         public bool locked { get; set; }
 
         public virtual ApplicationUser User { get; set; }
