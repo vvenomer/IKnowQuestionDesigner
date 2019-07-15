@@ -85,9 +85,9 @@ namespace Iknow.Controllers
         {
             if (ModelState.IsValid)
             {
-
-                var category = questionType.Category != null ? context.Categories.Find(int.Parse(questionType.Category)) : null;
-                context.Add(questionType);
+                if (questionType.Category != null)
+                    questionType.category = context.Categories.Find(int.Parse(questionType.Category));
+                context.Add((QuestionType)questionType);
                 await context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -134,12 +134,8 @@ namespace Iknow.Controllers
                 {
                     if(questionType.Category != null)
                         questionType.category = context.Categories.Find(int.Parse(questionType.Category));
-                    else
-                    {
 
-                    }
-
-                    context.Update(questionType);
+                    context.Update((QuestionType)questionType);
                     await context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
